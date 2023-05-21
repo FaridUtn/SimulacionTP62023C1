@@ -30,8 +30,8 @@ func main() {
 	var NT int = 0
 	var CLL int = 0
 	var NV []int
-	var TF float64 = 600000000
-	var HV float64 = 999999999
+	var TF float64 = 60000000
+	var HV float64 = 99999999
 	var franja int = 2
 
 	for i := 0; i < NC; i++ {
@@ -50,29 +50,26 @@ func main() {
 			CLL++
 			NT++
 			STLL += T
-			IA = getIaByHour(franja)
+			IA = getIaPorFranja(franja)
 			TPLL = T + IA
 			i := getMenorFila(NV)
 			NV[i]++
 
 			if NV[i] == 1 {
 				if T >= TFQ {
-					TA = generoTA()
+					TA = getTA()
 					TPS[i] = T + TA
 					STO[i] = STO[i] + (T - ITO[i])
+					STA += TA
 
 				} else {
 					TPS[i] = T + TAQ
+					STA += TAQ
 				}
 			} else {
 				if NT > NQ && T > TFQ {
-					DQ = generoDQ()
+					DQ = getDQ()
 					TFQ = T + DQ
-
-					for i := 0; i < NC; i++ {
-						TPS[i] = T + TAQ
-						STA += TAQ
-					}
 				}
 			}
 		} else {
@@ -86,7 +83,7 @@ func main() {
 					TPS[x] = T + TAQ
 					STA += TAQ
 				} else {
-					TA = generoTA()
+					TA = getTA()
 					TPS[x] = T + TA
 					STA += TA
 				}
@@ -150,12 +147,12 @@ func getPrecio() float64 {
 	return 500
 }
 
-func generoDQ() float64 {
+func getDQ() float64 {
 	r := rand.Float64()
 	return 180 / (math.Pow((1 - r), 0.4764))
 }
 
-func generoTA() float64 {
+func getTA() float64 {
 	r := rand.Float64()
 	return 14 / (math.Pow((1 - r), 0.9225))
 }
@@ -171,7 +168,7 @@ func getMenorFila(NV []int) int {
 	return j
 }
 
-func getIaByHour(franja int) float64 {
+func getIaPorFranja(franja int) float64 {
 	if franja == 1 {
 		return iaFranja1()
 	} else if franja == 2 {
